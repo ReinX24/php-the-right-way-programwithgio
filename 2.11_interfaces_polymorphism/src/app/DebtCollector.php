@@ -2,7 +2,7 @@
 
 namespace App;
 
-interface DebtCollector
+interface DebtCollector extends AnotherInferface, SomeOtherInterface
 {
     public function collect(float $owedAmount): float;
 }
