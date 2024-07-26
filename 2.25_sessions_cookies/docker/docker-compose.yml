@@ -1,0 +1,20 @@
+services:
+  app:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: sessions-cookies
+    restart: always
+    working_dir: /var/www/
+    volumes:
+      - ../src:/var/www
+      - ./local.ini:/usr/local/etc/php/conf.d/local.ini
+  nginx:
+    image: nginx:1.19-alpine
+    container_name: sessions-cookies-nginx
+    restart: always
+    ports:
+      - 8000:80
+    volumes:
+      - ../src:/var/www
+      - ./nginx:/etc/nginx/conf.d
