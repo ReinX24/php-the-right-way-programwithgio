@@ -1,0 +1,38 @@
+To run application, open the docker desktop application
+
+Go to docker directory and run the following command to start the application:
+
+docker-compose up
+
+To stop the container, simply press Ctrl + C
+
+Composer tutorial: https://youtu.be/rqzYdHdyMH0?si=zTqwV0PTCwJHFVPJ
+
+To update Docker image and run in background, run the following command:
+
+docker-compose up -d --build
+
+To update the docker container when we change something, run the following:
+
+docker-compose build
+
+SSH into docker container:
+
+docker exec -it programwithgio-app bash
+
+Once we are in our container, we can then install packages:
+
+composer require ramsey/uuid
+
+To regenerate composer files (edited composer.json), use the following command:
+
+composer dump-autoload
+
+For optimized autoloading, use the following command:
+
+composer dump-autoload -o
+
+If we ever decided to delete a dependency, we can use the following command to 
+update the composer dependencies:
+
+composer update

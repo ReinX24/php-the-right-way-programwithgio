@@ -2,7 +2,9 @@
 
 require_once "../vendor/autoload.php";
 
-// TODO: resume @1:18
+session_start();
+
+define("STORAGE_PATH", __DIR__ . "/../storage");
 
 $router = new App\Router();
 
