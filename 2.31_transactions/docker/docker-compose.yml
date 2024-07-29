@@ -3,7 +3,7 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
-    container_name: prepared-statements
+    container_name: transactions
     restart: always
     working_dir: /var/www/
     volumes:

@@ -5,24 +5,50 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\View;
+use PDO;
+use PDOException;
 
 class HomeController
 {
     public function index(): View
     {
         try {
-            $db = new \PDO("mysql:host=db;dbname=my_db", "root", "root");
+            $db = new PDO("mysql:host=db;dbname=my_db", "root", "root", [
+                PDO::ATTR_EMULATE_PREPARES => false
+            ]);
 
-            $query = "SELECT * FROM users";
+            // $email = "gia@doe.com";
+            // $name = "Gia Doe";
+            // $isActive = 1;
+            // $createdAt = date("Y-m-d H:i:s", strtotime("07/11/2021 9:00PM"));
 
-            $stmt = $db->query($query);
+            // $query =
+            //     'INSERT INTO 
+            //         users (email, full_name, is_active, created_at, updated_at)
+            //     VALUES 
+            //         (:email, :full_name, :is_active, :created_at, :updated_at)';
+
+            // $stmt = $db->prepare($query);
+
+            // $stmt->bindValue(":email", $email);
+            // $stmt->bindValue(":full_name", $name);
+            // $stmt->bindValue(":is_active", $isActive, PDO::PARAM_BOOL);
+            // $stmt->bindValue(":created_at", $createdAt);
+            // $stmt->bindValue(":updated_at", $createdAt);
+
+            // $stmt->execute();
+
+            // $id = $db->lastInsertId();
+            $id = 1;
+            $user = $db->query("SELECT * FROM users WHERE id = $id")->fetch();
 
             echo "<pre>";
-            var_dump($stmt->fetchAll());
+            var_dump($user);
             echo "</pre>";
-        } catch (\PDOException $e) {
-            throw new \PDOException($e->getMessage(), $e->getCode());
+        } catch (PDOException $e) {
+            throw new PDOException($e->getMessage(), (int) $e->getCode());
         }
+
 
         return View::make(
             "index",
