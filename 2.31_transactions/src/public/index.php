@@ -4,9 +4,8 @@ use App\Exceptions\RouteNotFoundException;
 
 require_once "../vendor/autoload.php";
 
-use App\View;
-
-session_start();
+$dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
+$dotenv->load();
 
 define("STORAGE_PATH", __DIR__ . "/../storage");
 define("VIEW_PATH", __DIR__ . "/../views");
@@ -30,5 +29,5 @@ try {
     // If the route requested is not found
     http_response_code(404);
 
-    echo View::make("error/404");
+    echo App\View::make("error/404");
 }

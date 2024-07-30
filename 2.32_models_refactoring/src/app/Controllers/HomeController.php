@@ -5,25 +5,14 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\View;
+use App\App;
 use PDO;
-use PDOException;
 
 class HomeController
 {
     public function index(): View
     {
-        try {
-            $db = new PDO(
-                "mysql:host=" . $_ENV["DB_HOST"] . ";dbname=" . $_ENV["DB_DATABASE"],
-                $_ENV["DB_USER"],
-                $_ENV["DB_PASS"],
-                [
-                    PDO::ATTR_EMULATE_PREPARES => false
-                ]
-            );
-        } catch (PDOException $e) {
-            throw new PDOException($e->getMessage(), (int) $e->getCode());
-        }
+        $db = App::db();
 
         $email = "john@doe.com";
         $name = "John Doe";
