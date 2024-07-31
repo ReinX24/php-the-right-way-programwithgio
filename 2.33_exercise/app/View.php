@@ -23,11 +23,11 @@ class View
     {
         $viewPath = VIEW_PATH . '/' . $this->view . '.php';
 
-        if (! file_exists($viewPath)) {
+        if (!file_exists($viewPath)) {
             throw new ViewNotFoundException();
         }
 
-        foreach($this->params as $key => $value) {
+        foreach ($this->params as $key => $value) {
             $$key = $value;
         }
 
@@ -38,11 +38,21 @@ class View
         return (string) ob_get_clean();
     }
 
+    /**
+     * This function is called when the view is returned
+     * @return string
+     */
     public function __toString(): string
     {
         return $this->render();
     }
 
+    /**
+     * This function is called when a variable is loaded in the page using 
+     * $this keyword.
+     * @param string $name
+     * @return mixed
+     */
     public function __get(string $name)
     {
         return $this->params[$name] ?? null;

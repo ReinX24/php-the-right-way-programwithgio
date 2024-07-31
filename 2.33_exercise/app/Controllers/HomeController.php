@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\View;
-use Ramsey\Uuid\Builder\FallbackBuilder;
+use App\Models\Transaction;
 
 class HomeController
 {
@@ -16,12 +16,16 @@ class HomeController
 
     public function transactions(): View
     {
-        return View::make("transactions");
+        $transaction = new Transaction();
+        $allTransactions = $transaction->getAllTransactions();
+        return View::make("transactions", ["transactions" => $allTransactions]);
     }
 
     public function upload()
     {
         $csvTransactions = [];
+
+        $transaction = new Transaction();
 
         foreach ($_FILES["transactions"]["tmp_name"] as $file) {
             $open = fopen($file, "r");
@@ -32,29 +36,36 @@ class HomeController
             fclose($open);
         }
 
-        foreach ($csvTransactions as $transaction) {
+        foreach ($csvTransactions as $eachTransaction) {
             // Adding each transaction to our database
 
             $transactionData = [];
 
             // Formatting the date
-            $transactionData["transaction_date"] = date("M/d/Y", strtotime($transaction[0]));
+            $transactionData["transaction_date"] = date("Y/m/d", strtotime($eachTransaction[0]));
 
             // Converting to integer
-            $transactionData["check_number"] = (int) $transaction[1];
+            // TODO: should return null
+            $transactionData["check_number"] = (int) $eachTransaction[1];
 
             // Checking for special characters
-            $transactionData["description"] = htmlspecialchars($transaction[2]);
+            $transactionData["description"] = htmlspecialchars($eachTransaction[2]);
 
             // Removing dollar signs and commas for float conversion
-            // TODO: replace with regex
-            $transaction[3] = str_replace("$", "", $transaction[3]);
-            $transaction[3] = str_replace(",", "", $transaction[3]);
-            $transactionData["amount"] = $transaction[3];
+            $eachTransaction[3] = preg_replace("/[$,]/i", "", $eachTransaction[3]);
+            $transactionData["amount"] = (float) $eachTransaction[3];
 
-            echo "<pre>";
-            var_dump($transactionData);
-            echo "<pre>";
+            // echo "<pre>";
+            // var_dump($transactionData);
+            // echo "</pre>";
+
+            // Adding transaction to our database
+            $transaction->create(
+                $transactionData["transaction_date"],
+                $transactionData["check_number"],
+                $transactionData["description"],
+                $transactionData["amount"],
+            );
         }
     }
 }

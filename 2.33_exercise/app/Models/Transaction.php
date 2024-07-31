@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Model;
+use \PDO;
 
 class Transaction extends Model
 {
@@ -25,5 +26,16 @@ class Transaction extends Model
         $newTransactionStmt->bindValue(":check_number", $checkNumber);
         $newTransactionStmt->bindValue(":description", $description);
         $newTransactionStmt->bindValue(":amount", $amount);
+
+        $newTransactionStmt->execute();
+    }
+
+    public function getAllTransactions(): array
+    {
+        $getAllStmt = $this->db->prepare("SELECT * FROM transactions");
+
+        $getAllStmt->execute();
+
+        return $getAllStmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
