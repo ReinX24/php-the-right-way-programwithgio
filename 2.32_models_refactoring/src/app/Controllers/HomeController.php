@@ -5,81 +5,46 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\View;
-use App\App;
-use PDO;
+use App\Models\User;
+use App\Models\Invoice;
+use App\Models\SignUp;
 
 class HomeController
 {
     public function index(): View
     {
-        $db = App::db();
+        $email = "gia@doe.com";
+        $name = "Gia Doe";
+        $amount = 30;
 
-        $email = "john@doe.com";
-        $name = "John Doe";
-        $amount = 25;
+        $userModel = new User();
+        $invoiceModel = new Invoice();
 
-        try {
-            $db->beginTransaction();
-
-            $newUserStmt = $db->prepare(
-                "INSERT INTO users (email, full_name, is_active, created_at)
-                VALUES (:email, :full_name, 1, NOW())"
-            );
-
-            $newInvoiceStmt = $db->prepare(
-                "INSERT INTO invoices (amount, user_id)
-                VALUES (:amount, :user_id)"
-            );
-
-            $newUserStmt->bindValue(":email", $email);
-            $newUserStmt->bindValue(":full_name", $name);
-
-            $newUserStmt->execute();
-
-            $userId = (int) $db->lastInsertId();
-
-            $newInvoiceStmt->bindValue(":amount", $amount);
-            $newInvoiceStmt->bindValue(":user_id", $userId);
-
-            $newInvoiceStmt->execute();
-
-            $db->commit();
-        } catch (\Throwable $e) {
-            if ($db->inTransaction()) {
-                $db->rollBack();
-            }
-        }
-
-        //* Getting the data from users and invoices tables
-        $fetchStmt = $db->prepare(
-            "SELECT invoices.id AS invoice_id, amount, user_id, full_name
-            FROM invoices
-            INNER JOIN users ON user_id = users.id
-            WHERE email = :email"
+        $invoiceId = (new SignUp($userModel, $invoiceModel))->register(
+            [
+                "email" => $email,
+                "name" => $name
+            ],
+            [
+                "amount" => $amount
+            ]
         );
 
-        $fetchStmt->bindValue(":email", $email);
+        // $fetchAllStmt = $db->prepare(
+        //     "SELECT invoices.id AS invoice_id, amount, user_id, full_name
+        //     FROM invoices
+        //     INNER JOIN users ON user_id = users.id"
+        // );
 
-        $fetchStmt->execute();
+        // $fetchAllStmt->execute();
 
-        echo "<pre>";
-        var_dump($fetchStmt->fetch(PDO::FETCH_ASSOC));
-        echo "</pre>";
-
-        $fetchAllStmt = $db->prepare(
-            "SELECT invoices.id AS invoice_id, amount, user_id, full_name
-            FROM invoices
-            INNER JOIN users ON user_id = users.id"
-        );
-
-        $fetchAllStmt->execute();
-
-        echo "<pre>";
-        var_dump($fetchAllStmt->fetchAll(PDO::FETCH_ASSOC));
-        echo "</pre>";
+        // echo "<pre>";
+        // var_dump($fetchAllStmt->fetchAll(PDO::FETCH_ASSOC));
+        // echo "</pre>";
 
         return View::make(
             "index",
+            ["invoice" => $invoiceModel->find($invoiceId)]
         ); // this runs the __toString function
     }
 

@@ -9,6 +9,14 @@
 
 <body>
     <h1>Home Page</h1>
+    <hr>
+    <div>
+        <?php if (!empty($invoice)) : ?>
+            <p>Invoice ID: <?= htmlspecialchars($invoice["id"], ENT_QUOTES) ?></p>
+            <p>Invoice Amount: <?= htmlspecialchars($invoice["amount"], ENT_QUOTES) ?></p>
+            <p>User: <?= htmlspecialchars($invoice["full_name"], ENT_QUOTES) ?></p>
+        <?php endif; ?>
+    </div>
 </body>
 
 </html>

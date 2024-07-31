@@ -32,5 +32,3 @@ $router
     ],
     new Config($_ENV)
 ))->run();
-
-// TODO: continue @11:37

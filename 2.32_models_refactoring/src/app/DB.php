@@ -23,9 +23,7 @@ class DB
                 $config["driver"] . ":host=" . $config["host"] . ";dbname=" . $config["database"],
                 $config["user"],
                 $config["pass"],
-                [
-                    $config["options"] ?? $defaultOptions
-                ]
+                $config["options"] ?? $defaultOptions
             );
         } catch (PDOException $e) {
             throw new PDOException($e->getMessage(), (int) $e->getCode());

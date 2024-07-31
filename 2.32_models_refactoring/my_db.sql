@@ -29,7 +29,7 @@ CREATE TABLE `invoices` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `invoices_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,7 +38,7 @@ CREATE TABLE `invoices` (
 
 LOCK TABLES `invoices` WRITE;
 /*!40000 ALTER TABLE `invoices` DISABLE KEYS */;
-INSERT INTO `invoices` VALUES (1,25.0000,1),(2,115.9500,1),(3,10500.0000,1);
+INSERT INTO `invoices` VALUES (1,25.0000,1),(2,115.9500,1),(3,10500.0000,1),(4,25.0000,3),(5,30.0000,9),(6,30.0000,14);
 /*!40000 ALTER TABLE `invoices` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -59,7 +59,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
   KEY `is_active` (`is_active`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -68,7 +68,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'john@doe.com','John Doe',1,'2024-07-29 06:01:03',NULL),(2,'jane@doe.com','Jane Doe',0,'2024-07-29 08:27:46',NULL),(3,'jake@doe.com','Jake Doe',1,'2021-07-11 21:00:00',NULL),(4,'Jake Doe','jake@doe.com',1,'2021-07-11 21:00:00',NULL),(5,'jason@doe.com','Jason Doe',1,'2021-07-11 21:00:00',NULL),(6,'jeremy@doe.com','Jeremy Doe',0,'2021-07-11 21:00:00',NULL),(7,'joan@doe.com','Joan Doe',1,'2021-07-11 21:00:00',NULL),(8,'gio@doe.com','gio Doe',1,'2021-07-11 21:00:00','2021-07-11 21:00:00'),(11,'gia@doe.com','Gia Doe',1,'2021-07-11 21:00:00','2021-07-11 21:00:00');
+INSERT INTO `users` VALUES (1,'john@doe.com','John Doe',1,'2024-07-29 06:01:03',NULL),(2,'jane@doe.com','Jane Doe',0,'2024-07-29 08:27:46',NULL),(3,'rein@doe.com','Rein Doe',1,'2024-07-31 01:53:41',NULL),(9,'gio@doe.com','Gio Doe',1,'2024-07-31 02:39:01',NULL),(14,'gia@doe.com','Gia Doe',1,'2024-07-31 03:10:46',NULL);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -81,4 +81,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-07-29 20:49:49
+-- Dump completed on 2024-07-31 11:12:36

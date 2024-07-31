@@ -1,0 +1,17 @@
+{
+    "name": "reinx/2.33_exercise",
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Rein",
+            "email": "reinX244@gmail.com"
+        }
+    ],
+    "require": {
+        "vlucas/phpdotenv": "^5.6"
+    }
+}
