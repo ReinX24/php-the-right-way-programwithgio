@@ -1,10 +1,5 @@
 <!DOCTYPE html>
 <html>
-<?php
-// echo "<pre>";
-// var_dump($this->transactions);
-// echo "</pre>";
-?>
 
 <head>
     <title>Transactions</title>
@@ -43,14 +38,21 @@
             </tr>
         </thead>
         <tbody>
-            <!-- TODO: format date -->
-            <!-- TODO: format amount -->
             <?php foreach ($transactions as $transaction) : ?>
                 <tr>
-                    <td><?= $transaction["transaction_date"] ?></td>
+                    <td><?= date("M/d/Y", strtotime($transaction["transaction_date"])) ?></td>
                     <td><?= $transaction["check_number"] ?></td>
                     <td><?= $transaction["description"] ?></td>
-                    <td><?= $transaction["amount"] ?></td>
+
+                    <?php if ($transaction["amount"] > 0) : ?>
+                        <td style="color:green;">
+                            <?= Brick\Money\Money::of($transaction["amount"], "USD")->formatTo("en_US"); ?>
+                        </td>
+                    <?php else : ?>
+                        <td style="color:red;">
+                            <?= Brick\Money\Money::of($transaction["amount"], "USD")->formatTo("en_US"); ?>
+                        </td>
+                    <?php endif; ?>
                 </tr>
             <?php endforeach; ?>
         </tbody>
