@@ -11,7 +11,7 @@ class Transaction extends Model
 {
     public function create(
         string $date,
-        int $checkNumber,
+        ?int $checkNumber,
         string $description,
         float $amount
     ) {
@@ -36,6 +36,50 @@ class Transaction extends Model
 
         $getAllStmt->execute();
 
-        return $getAllStmt->fetchAll(PDO::FETCH_ASSOC);
+        return $getAllStmt->fetchAll();
+    }
+
+    public function getTotalIncome()
+    {
+        $totalIncome = $this->db->prepare(
+            "SELECT 
+                SUM(amount) 
+            AS 
+                totalIncome 
+            FROM 
+                transactions 
+            WHERE 
+                amount > 0"
+        );
+
+        $totalIncome->execute();
+
+        return $totalIncome->fetch();
+    }
+
+    public function getTotalExpense()
+    {
+        $totalExpense = $this->db->prepare(
+            "SELECT 
+                SUM(amount) 
+            AS
+                totalExpense
+            FROM 
+                transactions 
+            WHERE 
+                amount < 0"
+        );
+
+        $totalExpense->execute();
+
+        return $totalExpense->fetch();
+    }
+
+    public function getNetTotal()
+    {
+        extract($this->getTotalIncome()); // $totalIncome
+        extract($this->getTotalExpense()); // $totalExpense
+
+        return $totalIncome + $totalExpense;
     }
 }

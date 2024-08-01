@@ -18,14 +18,7 @@
         <a href="/">Home |</a>
         <a href="/transactions">Transactions |</a>
     </div>
-    <h1>Home Page</h1>
-    <div>
-        <form action="/upload" method="POST" enctype="multipart/form-data">
-            <input type="file" name="transactions[]">
-            <input type="file" name="transactions[]">
-            <button type="submit">Upload</button>
-        </form>
-    </div>
+    <h1>Upload Success!</h1>
 </body>
 
 </html>
