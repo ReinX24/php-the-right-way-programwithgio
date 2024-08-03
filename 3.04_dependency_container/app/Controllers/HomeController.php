@@ -11,10 +11,13 @@ use App\Services\InvoiceService;
 
 class HomeController
 {
+    public function __construct(private InvoiceService $invoiceService)
+    {
+    }
+
     public function index(): View
     {
-        (new Container())->get(InvoiceService::class)->process([], 25);
-        // TODO: continue @16:05
+        $this->invoiceService->process([], 25);
 
         return View::make('index');
     }
