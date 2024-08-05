@@ -8,6 +8,7 @@ use App\Attributes\Route;
 use App\Attributes\Get;
 use App\Attributes\Post;
 use App\Attributes\Put;
+use App\Enums\HttpMethod;
 use App\View;
 use App\Models\Transaction;
 use App\Services\InvoiceService;
@@ -19,7 +20,7 @@ class HomeController
     }
 
     #[Get("/")]
-    #[Get(routePath: "/home")]
+    #[Route("/home", HttpMethod::Head)]
     public function index(): View
     {
         $this->invoiceService->process([], 25);
