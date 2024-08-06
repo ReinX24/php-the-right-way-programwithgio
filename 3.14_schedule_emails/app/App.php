@@ -9,19 +9,29 @@ use App\Services\PaddlePayment;
 use App\Services\PaymentGatewayInterface;
 use App\Services\PaymentGatewayService;
 use App\Services\StripePayment;
+use Dotenv\Dotenv;
 use Symfony\Component\Mailer\MailerInterface;
 
 class App
 {
     private static DB $db;
+    private Config $config;
 
     public function __construct(
         protected Container $container,
-        protected Router $router,
-        protected array $request,
-        protected Config $config
+        protected ?Router $router = null,
+        protected array $request = [],
     ) {
-        static::$db = new DB($config->db ?? []);
+    }
+
+    public function boot(): static
+    {
+        $dotenv = Dotenv::createImmutable(dirname(__DIR__));
+        $dotenv->load();
+
+        $this->config = new Config($_ENV);
+
+        static::$db = new DB($this->config->db ?? []);
 
         // If a class implements an interface, we need to register the interface
         // so that the container could recognize it as a class.
@@ -33,8 +43,10 @@ class App
         $this->container->set(
             MailerInterface::class,
             // Function needed for constructor of the class
-            fn () => new CustomMailer($config->mailer["dsn"])
+            fn () => new CustomMailer($this->config->mailer["dsn"])
         );
+
+        return $this;
 
         // Adding classes and their constructors to our container
         // static::$container->set(InvoiceService::class, function (Container $c) {
