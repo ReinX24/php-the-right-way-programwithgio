@@ -5,7 +5,7 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
-    container_name: schedule-emails
+    container_name: doctrine
     restart: always
     working_dir: /var/www/
     volumes:
