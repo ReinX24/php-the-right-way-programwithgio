@@ -3,8 +3,6 @@
 declare(strict_types=1);
 
 use Dotenv\Dotenv;
-use Doctrine\DBAL\DriverManager;
-use Doctrine\DBAL\Schema\Column;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -19,9 +17,11 @@ $connectionParams = [
     'driver' => $_ENV["DB_DRIVER"] ?? "pdo_mysql",
 ];
 
-$conn = DriverManager::getConnection($connectionParams);
+$conn = \Doctrine\DBAL\DriverManager::getConnection($connectionParams);
 
 $schema = $conn->createSchemaManager();
+
+var_dump($schema->listTableNames());
 
 var_dump(
     array_keys(

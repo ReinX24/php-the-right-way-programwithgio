@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App;
 
-use Doctrine\DBAL\Driver\PDO\Connection;
+use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 // use PDO;
 

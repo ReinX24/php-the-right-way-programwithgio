@@ -22,7 +22,6 @@ class InvoiceController
         // var_dump(InvoiceStatus::cases());
         // var_dump(enum_exists(InvoiceStatus::class));
 
-        // TODO: resume @17:01
         $invoices = (new Invoice())->all(InvoiceStatus::Paid);
 
         return View::make("invoices/index", ["invoices" => $invoices]);
