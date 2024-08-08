@@ -29,29 +29,55 @@ $entityManager = new EntityManager(
     ])
 );
 
+// WHERE amount > :amount AND (status = :status OR created_at >= :date)
 //* Start of Query Builder
 $queryBuilder = $entityManager->createQueryBuilder();
 $query = $queryBuilder
-    ->select("i")
+    ->select("i", "it")
     ->from(Invoice::class, "i")
-    ->where("i.amount > :amount")
-    ->setParameter("amount", 100)
+    ->join("i.items", "it")
+    ->where(
+        // Building a custom expression
+        // gt: greater than
+        // eq: equal
+        // gte: greater than or equial
+        $queryBuilder->expr()->andX(
+            $queryBuilder->expr()->gt("i.amount", ":amount"),
+            $queryBuilder->expr()->orX(
+                $queryBuilder->expr()->eq("i.status", ":status"),
+                $queryBuilder->expr()->gte("i.createdAt", ":date"),
+            )
+        )
+    )
+    // ->andWhere("i.status = :status")
+    // ->orWhere("i.createdAt >= :date")
+    ->setParameter("amount", 10)
+    ->setParameter("status", InvoiceStatus::Paid->value)
+    ->setParameter("date", "2024-01-01 00:00:00")
     ->orderBy("i.createdAt", "DESC")
     ->getQuery();
 
 // echo $query->getDQL() . PHP_EOL;
+// exit;
 
+// $invoices = $query->getArrayResult();
 $invoices = $query->getResult();
 
 // var_dump($invoices);
+// exit;
 
 /** @var Invoice $invoice */
-// TODO: resume @6:24
 foreach ($invoices as $invoice) {
     echo $invoice->getCreatedAt()->format("m/d/Y g:ia")
         . ", " . $invoice->getAmount()
         . ", " . $invoice->getStatus()
         ->toString() . PHP_EOL;
+
+    foreach ($invoice->getItems() as $item) {
+        echo " - " . $item->getDescription()
+            . ", " . $item->getQuantity()
+            . ", " . $item->getUnitPrice() . PHP_EOL;
+    }
 }
 
 //* Start of PHP Entities
@@ -68,11 +94,10 @@ foreach ($invoices as $invoice) {
 //     ["Item 3", 4, 3.75]
 // ];
 
-// $invoice = (new \App\Entity\Invoice())
+// $invoice = (new Invoice())
 //     ->setAmount(45)
 //     ->setInvoiceNumber("1")
-//     ->setStatus(\App\Enums\InvoiceStatus::Pending)
-//     ->setCreatedAt(new DateTime());
+//     ->setStatus(InvoiceStatus::Pending);
 
 // foreach ($items as [$description, $quantity, $unitPrice]) {
 //     $item = (new \App\Entity\InvoiceItem())
@@ -82,7 +107,6 @@ foreach ($invoices as $invoice) {
 
 //     $invoice->addItem($item);
 //     $entityManager->persist($item); // No need to persist because items cascade into invoice 
-
 // }
 
 // Adding the entities to our database

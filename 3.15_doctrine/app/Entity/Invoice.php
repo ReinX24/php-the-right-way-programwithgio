@@ -11,12 +11,16 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\OneToMany;
+use Doctrine\ORM\Mapping\PrePersist;
 use Doctrine\ORM\Mapping\Table;
+use Doctrine\Persistence\Event\LifecycleEventArgs;
 
 #[Entity]
 #[Table('invoices')]
+#[HasLifecycleCallbacks]
 class Invoice
 {
     #[Id]
@@ -41,6 +45,17 @@ class Invoice
     public function __construct()
     {
         $this->items = new ArrayCollection();
+    }
+
+    /**
+     * Triggers on the pre persist
+     * @param \Doctrine\Persistence\Event\LifecycleEventArgs $args
+     * @return void
+     */
+    #[PrePersist]
+    public function onPrePersist(LifecycleEventArgs $args)
+    {
+        $this->createdAt = new \DateTime();
     }
 
     public function getId(): int
@@ -87,13 +102,6 @@ class Invoice
     public function getCreatedAt(): \DateTime | null
     {
         return $this->createdAt ?? null;
-    }
-
-    public function setCreatedAt(\DateTime $createdAt): Invoice
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
     }
 
     /**

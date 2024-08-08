@@ -61,7 +61,7 @@ CREATE TABLE `invoice_items` (
   PRIMARY KEY (`id`),
   KEY `invoice_id` (`invoice_id`),
   CONSTRAINT `invoice_items_ibfk_1` FOREIGN KEY (`invoice_id`) REFERENCES `invoices` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -70,6 +70,7 @@ CREATE TABLE `invoice_items` (
 
 LOCK TABLES `invoice_items` WRITE;
 /*!40000 ALTER TABLE `invoice_items` DISABLE KEYS */;
+INSERT INTO `invoice_items` VALUES (1,5,'Item 1',1,15.00),(2,5,'Item 2',2,7.50),(3,5,'Item 3',4,3.75),(4,6,'Item 1',1,15.00),(5,6,'Item 2',2,7.50),(6,6,'Item 3',4,3.75),(16,10,'Foo bar',1,15.00),(17,10,'Item 2',2,7.50),(18,10,'Item 3',4,3.75),(19,11,'Item 1',1,15.00),(20,11,'Item 2',2,7.50),(21,11,'Item 3',4,3.75),(22,12,'Item 1',1,15.00),(23,12,'Item 2',2,7.50),(24,12,'Item 3',4,3.75);
 /*!40000 ALTER TABLE `invoice_items` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -83,11 +84,11 @@ DROP TABLE IF EXISTS `invoices`;
 CREATE TABLE `invoices` (
   `id` int NOT NULL AUTO_INCREMENT,
   `invoice_number` int DEFAULT NULL,
-  `amount` decimal(10,4) DEFAULT NULL,
+  `amount` decimal(10,2) DEFAULT NULL,
   `status` int DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -96,7 +97,7 @@ CREATE TABLE `invoices` (
 
 LOCK TABLES `invoices` WRITE;
 /*!40000 ALTER TABLE `invoices` DISABLE KEYS */;
-INSERT INTO `invoices` VALUES (1,5,7681.0000,3,'2022-01-01 12:00:00'),(2,6,8980.7200,2,'2022-01-31 00:00:00'),(3,8,980.7200,1,NULL),(4,9,2330.3400,0,NULL);
+INSERT INTO `invoices` VALUES (1,5,7681.00,3,'2022-01-01 12:00:00'),(2,6,8980.72,2,'2022-01-01 00:00:00'),(3,8,980.72,1,'2022-01-31 00:00:00'),(4,9,2330.34,0,'2022-01-31 00:00:00'),(5,1,45.00,0,'2024-08-08 02:22:25'),(6,1,45.00,0,'2024-08-08 02:24:42'),(10,1,45.00,1,'2024-08-08 02:28:18'),(11,1,45.00,1,'2024-08-08 02:29:32'),(12,1,45.00,0,'2024-08-08 15:15:05');
 /*!40000 ALTER TABLE `invoices` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -162,4 +163,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-08-07 22:42:50
+-- Dump completed on 2024-08-08 23:21:06
