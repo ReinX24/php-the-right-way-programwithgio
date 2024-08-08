@@ -84,9 +84,9 @@ class Invoice
         return $this;
     }
 
-    public function getCreatedAt(): \DateTime
+    public function getCreatedAt(): \DateTime | null
     {
-        return $this->createdAt;
+        return $this->createdAt ?? null;
     }
 
     public function setCreatedAt(\DateTime $createdAt): Invoice
