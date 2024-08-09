@@ -1,0 +1,25 @@
+{
+    "name": "reinx/2.33_exercise",
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Rein",
+            "email": "reinX244@gmail.com"
+        }
+    ],
+    "require": {
+        "ext-pdo": "*",
+        "vlucas/phpdotenv": "^5.6",
+        "brick/money": "^0.9.0",
+        "psr/container": "^2.0",
+        "symfony/mailer": "^7.1",
+        "doctrine/dbal": "^4.0",
+        "doctrine/orm": "^3.2",
+        "symfony/cache": "^7.1",
+        "doctrine/migrations": "3.8.0"
+    }
+}
