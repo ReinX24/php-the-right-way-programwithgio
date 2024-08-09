@@ -48,3 +48,11 @@ composer require vlucas/phpdotenv
 
 Link for mailhog webpage
 localhost:8025
+
+Doctrine Commands:
+
+Creating migration class
+./vendor/bin/doctrine-migrations generate
+
+Migrating class after generating
+./vendor/bin/doctrine-migrations migrate
