@@ -1,0 +1,47 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App;
+
+/**
+ * @property-read ?array $db
+ */
+class Config
+{
+    protected array $config = [];
+
+    public function __construct(array $env)
+    {
+        // $connectionParams = [
+        //     'database' => $_ENV["DB_DATABASE"],
+        //     'username' => $_ENV["DB_USER"],
+        //     'password' => $_ENV["DB_PASS"],
+        //     'host' => $_ENV["DB_HOST"],
+        //     'driver' => $_ENV["DB_DRIVER"] ?? "mysql",
+        // ];
+
+        $this->config = [
+            'db' => [
+                'host'     => $env['DB_HOST'],
+                'username' => $_ENV["DB_USER"],
+                'password'     => $env['DB_PASS'],
+                'database' => $_ENV["DB_DATABASE"],
+                // 'driver'   => $env['DB_DRIVER'] ?? 'mysql',
+                // 'driver' => $env["DB_DRIVER"] ?? "pdo_mysql",
+                'driver' => $env["DB_DRIVER"] ?? "mysql",
+                'charset' => 'utf8',
+                'collation' => 'utf8_unicode_ci',
+                'prefix' => '',
+            ],
+            'mailer' => [
+                'dsn' => $env["MAILER_DSN"] ?? "",
+            ]
+        ];
+    }
+
+    public function __get(string $name)
+    {
+        return $this->config[$name] ?? null;
+    }
+}
