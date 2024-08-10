@@ -8,6 +8,7 @@ use App\Enums\InvoiceStatus;
 use App\Models\Invoice;
 use App\View;
 use Carbon\Carbon;
+use NumberFormatter;
 use Symfony\Component\Mailer\MailerInterface;
 
 class InvoiceController
@@ -30,6 +31,10 @@ class InvoiceController
         // var_dump(enum_exists(InvoiceStatus::class));
 
         // $invoices = (new Invoice())->all(InvoiceStatus::Paid);
+
+        $a = new NumberFormatter("it-IT", NumberFormatter::DECIMAL);
+
+        echo $a->format(12345.12345) . "<br>"; // outputs 12.345,12
 
         $invoices = Invoice::query()
             ->where("status", InvoiceStatus::Paid)
