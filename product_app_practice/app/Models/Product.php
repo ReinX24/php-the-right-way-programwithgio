@@ -16,6 +16,13 @@ class Product extends Model
     private EntityManager $entityManager;
     private Config $config;
 
+    private ?int $id = null;
+    private ?string $title = null;
+    private ?string $description = null;
+    private ?float $price = null;
+    private ?string $imagePath = null;
+    private ?array $imageFile = null;
+
     public function __construct()
     {
         parent::__construct();
@@ -34,6 +41,62 @@ class Product extends Model
         );
     }
 
+    public function load(array $productData)
+    {
+        $this->title = $productData["title"] ?? null;
+        $this->description = $productData["title"] ?? null;
+        $this->imageFile = $productData["imageFile"] ?? null;
+        $this->imagePath = $productData["imagePath"] ?? null;
+        $this->price = (float) $productData["price"] ?? null;
+    }
+
+    public function saveProduct()
+    {
+        $errors = [];
+
+        if (empty($this->title)) {
+            $errors["noTitleError"] = "Title is required.";
+        }
+
+        if (empty($this->price)) {
+            $errors["noPriceError"] = "Price is required.";
+        }
+
+        // Creates a storage directory
+        if (!is_dir(__DIR__ . "/../../public/storage/images")) {
+            mkdir(__DIR__ . "/../../public/storage/images");
+        }
+
+        if (empty($errors)) {
+            if ($this->imageFile && $this->imageFile["tmp_name"]) {
+                // Setting imagePath in reference to public
+                $this->imagePath = "/storage/images/" . uniqid("product_") . "/" . $this->imageFile["name"];
+
+                // Setting destination path relative to current file
+                $destinationPath = __DIR__ . "/../../public" . $this->imagePath;
+
+                $product = (new ProductEntity())
+                    ->setTitle($this->title)
+                    ->setDescription($this->description)
+                    ->setImage($this->imagePath)
+                    ->setPrice($this->price);
+
+                // echo "<pre>";
+                // var_dump($product);
+                // echo "</pre>";
+                // exit;
+
+                mkdir(dirname($destinationPath));
+                move_uploaded_file($this->imageFile["tmp_name"], $destinationPath);
+
+                $this->entityManager->persist($product);
+                $this->entityManager->flush();
+            }
+        }
+
+        return $errors;
+    }
+
     public function allProducts()
     {
         // return $this->db->createQueryBuilder()
@@ -49,30 +112,6 @@ class Product extends Model
             ->getQuery();
 
         return $query->getResult();
-    }
-
-    public function addProduct(array $postData)
-    {
-        $errors = [];
-
-        $title = $postData["title"];
-        $description = $postData["title"];
-        $image = $postData["image"];
-        $price = $postData["amount"];
-
-        // TODO: check for empty fields and return errors if there are any
-        if (empty($errors)) {
-            $product = (new ProductEntity())
-                ->setTitle($title)
-                ->setDescription($description)
-                ->setImage($image)
-                ->setPrice($price);
-
-            // $this->entityManager->persist($product);
-            // $this->entityManager->flush();
-        }
-
-        return $errors;
     }
 
     // TODO: edit product

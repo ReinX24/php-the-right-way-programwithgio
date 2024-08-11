@@ -47,6 +47,32 @@ class ProductController
     #[Post("/add")]
     public function addPost()
     {
-        $errors = $this->product->addProduct($_POST);
+        $errors = [];
+
+        $formData = [
+            "title" => $_POST["title"],
+            "description" => $_POST["description"],
+            "imageFile" => $_FILES["image"],
+            "price" => $_POST["price"],
+        ];
+
+        $this->product->load($formData);
+        $errors = $this->product->saveProduct();
+
+        // If there are no errors, return to the index page
+        if (empty($errors)) {
+            header("Location: /");
+            exit;
+        }
+
+        // If there are errors, return to the add page
+        return View::make(
+            "add",
+            [
+                "page" => "Add Product",
+                "formData" => $formData,
+                "errors" => $errors
+            ]
+        );
     }
 }
