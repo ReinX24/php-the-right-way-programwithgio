@@ -6,7 +6,7 @@ namespace App;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
-// use PDO;
+use PDO;
 
 /**
  * @mixin Connection
@@ -19,7 +19,7 @@ class DB
     public function __construct(array $config)
     {
         // $defaultOptions = [
-        //     PDO::ATTR_EMULATE_PREPARES   => false,
+        //     PDO::ATTR_EMULATE_PREPARES => false,
         //     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
         // ];
 
@@ -36,8 +36,8 @@ class DB
         // try {
         //     $this->pdo = new PDO(
         //         $config['driver'] . ':host=' . $config['host'] . ';dbname=' . $config['database'],
-        //         $config['user'],
-        //         $config['pass'],
+        //         $config['username'],
+        //         $config['password'],
         //         $config['options'] ?? $defaultOptions
         //     );
         // } catch (\PDOException $e) {

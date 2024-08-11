@@ -42,7 +42,7 @@ class Invoice extends Model
     {
         return array_sum(
             array_map(
-                fn ($item) => $item["unitPrice"] * $item["quantity"],
+                fn($item) => $item["unitPrice"] * $item["quantity"],
                 $items
             )
         );

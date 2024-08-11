@@ -18,9 +18,9 @@ use Doctrine\ORM\Mapping\PrePersist;
 use Doctrine\ORM\Mapping\Table;
 use Doctrine\Persistence\Event\LifecycleEventArgs;
 
-#[Entity]
-#[Table('invoices')]
-#[HasLifecycleCallbacks]
+// #[Entity]
+// #[Table('invoices')]
+// #[HasLifecycleCallbacks]
 class Invoice
 {
     #[Id]
@@ -103,7 +103,7 @@ class Invoice
         return $this;
     }
 
-    public function getCreatedAt(): \DateTime | null
+    public function getCreatedAt(): \DateTime|null
     {
         return $this->createdAt ?? null;
     }

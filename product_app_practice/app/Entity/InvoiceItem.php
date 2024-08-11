@@ -12,8 +12,8 @@ use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\Table;
 
-#[Entity]
-#[Table('invoice_items')]
+// #[Entity]
+// #[Table('invoice_items')]
 class InvoiceItem
 {
     #[Id]

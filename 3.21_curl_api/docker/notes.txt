@@ -51,7 +51,8 @@ localhost:8025
 
 Doctrine Commands:
 
-Creating migration class
+Creating migration class, for these commands to work properly, you must be in 
+the docker bash command line for the app
 ./vendor/bin/doctrine-migrations generate
 
 Migrating classes after generating, this generates the tables in the database
