@@ -17,7 +17,7 @@ use Doctrine\ORM\ORMSetup;
 
 class ProductController
 {
-    public function __construct(private ProductModel $product)
+    public function __construct(private ProductModel $productModel)
     {
     }
 
@@ -25,7 +25,7 @@ class ProductController
     #[Route("/home", HttpMethod::Get)]
     public function index()
     {
-        $allProducts = $this->product->allProducts();
+        $allProducts = $this->productModel->allProducts();
 
         // echo "<pre>";
         // var_dump($allProducts[0]->getTitle());
@@ -56,8 +56,8 @@ class ProductController
             "price" => $_POST["price"],
         ];
 
-        $this->product->load($formData);
-        $errors = $this->product->saveProduct();
+        $this->productModel->load($formData);
+        $errors = $this->productModel->saveProduct();
 
         // If there are no errors, return to the index page
         if (empty($errors)) {
@@ -72,6 +72,26 @@ class ProductController
                 "page" => "Add Product",
                 "formData" => $formData,
                 "errors" => $errors
+            ]
+        );
+    }
+
+    #[Get("/delete")]
+    public function deletePost()
+    {
+        $id = $_GET["id"];
+
+        // Go back to the index of no id is provided
+        if (empty($id)) {
+            header("Location: /");
+        }
+
+        $result = $this->productModel->getProductById((int) $id);
+        return View::make(
+            "delete",
+            [
+                "page" => "Delete Product",
+                "product" => $result
             ]
         );
     }

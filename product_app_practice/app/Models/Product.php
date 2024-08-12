@@ -114,6 +114,21 @@ class Product extends Model
         return $query->getResult();
     }
 
+    public function getProductById(int $id)
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder();
+        $query = $queryBuilder
+            ->select("i")
+            ->from(ProductEntity::class, "i")
+            ->where(
+                $queryBuilder->expr()->eq("i.id", ":id")
+            )
+            ->setParameter("id", $id)
+            ->getQuery();
+
+        return $query->getSingleResult();
+    }
+
     // TODO: edit product
-    // TODO: remove product
+    // TODO: remove product POST function
 }

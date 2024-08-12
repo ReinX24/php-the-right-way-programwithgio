@@ -24,26 +24,25 @@
                     <th scope="col"></th>
                 </tr>
             </thead>
-            <?php foreach ($products as $product): ?>
-                <tr>
-                    <th scope="row"><?= $product->getId() ?></th>
-                    <td><?= $product->getTitle(); ?></td>
-                    <td><?= $product->getDescription(); ?></td>
-                    <td style="width: 8rem;">
-                        <img src="<?= $product->getImage(); ?>">
-                    </td>
-                    <td><?= $product->getPrice(); ?></td>
-                    <td><?= $product->getCreateDate(); ?></td>
-                    <td>
-                        <!-- TODO: add edit and delete button -->
-                        <div>
-                            <a href=""><button>Edit</button></a>
-                            <a href=""><button>Delete</button></a>
-                        </div>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
             <tbody>
+                <?php foreach ($products as $product): ?>
+                    <tr>
+                        <th scope="row"><?= $product->getId() ?></th>
+                        <td><?= $product->getTitle(); ?></td>
+                        <td><?= $product->getDescription(); ?></td>
+                        <td style="width: 8rem;">
+                            <img src="<?= $product->getImage(); ?>">
+                        </td>
+                        <td><?= $product->getPrice(); ?></td>
+                        <td><?= $product->getCreateDate(); ?></td>
+                        <td>
+                            <div>
+                                <a href="/edit?id=<?= $product->getId(); ?>"><button>Edit</button></a>
+                                <a href="/delete?id=<?= $product->getId(); ?>"><button>Delete</button></a>
+                            </div>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
             </tbody>
         </table>
 
