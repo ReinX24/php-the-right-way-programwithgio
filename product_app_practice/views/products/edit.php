@@ -5,6 +5,8 @@
             <img src="<?= $product->getImage(); ?>" style="width: 8rem;">
         <?php endif; ?>
 
+        <hr>
+
         <label for="image">Image</label>
         <input type="file" name="image">
 

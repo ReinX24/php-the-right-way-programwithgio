@@ -76,9 +76,9 @@ class Product extends Model
             if ($this->newImage && $this->newImage["tmp_name"]) {
                 // If an image is already set for the object and we want to 
                 // update the image
-                // if ($this->newImage && isset($this->existingImagePath)) {
-                //     unlink("/../../pubic" . $this->existingImagePath);
-                // }
+                if ($this->newImage && !empty($this->existingImagePath)) {
+                    unlink(__DIR__ . "/../../public" . $this->existingImagePath);
+                }
 
                 // Setting imagePath in reference to public
                 $imagePath = "/storage/images/" . uniqid("product_") . "/" . $this->newImage["name"];
@@ -86,20 +86,26 @@ class Product extends Model
                 // Setting destination path relative to current file
                 $destinationPath = __DIR__ . "/../../public" . $imagePath;
 
-                // echo "<pre>";
-                // var_dump($product);
-                // echo "</pre>";
-                // exit;
-
                 mkdir(dirname($destinationPath));
                 move_uploaded_file($this->newImage["tmp_name"], $destinationPath);
             }
 
-            $product = (new ProductEntity())
-                ->setTitle($this->title)
-                ->setDescription($this->description)
-                ->setImage($imagePath ?? null)
-                ->setPrice($this->price);
+            if ($this->id) {
+                // If an id is passed to the class, update
+                $product = $this->getProductById($this->id);
+
+                $product->setTitle($this->title);
+                $product->setDescription($this->description);
+                $product->setImage($imagePath ?? null);
+                $product->setPrice($this->price);
+            } else {
+                // Create new product
+                $product = (new ProductEntity())
+                    ->setTitle($this->title)
+                    ->setDescription($this->description)
+                    ->setImage($imagePath ?? null)
+                    ->setPrice($this->price);
+            }
 
             $this->entityManager->persist($product);
             $this->entityManager->flush();
@@ -143,16 +149,6 @@ class Product extends Model
     public function editProduct()
     {
         // TODO: unlink and change the photo of product if new image is uploaded
-        $product = $this->getProductById($this->id);
-
-        $product->setTitle($this->title);
-        $product->setDescription($this->description);
-        $product->setPrice($this->price);
-
-        $this->entityManager->persist($product);
-        $this->entityManager->flush();
-
-        header("Location: /");
     }
 
     public function deleteProductById(int $id)

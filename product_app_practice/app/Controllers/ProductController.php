@@ -100,12 +100,6 @@ class ProductController
     {
         $errors = [];
 
-        // echo "<pre>";
-        // var_dump($_POST);
-        // var_dump($_FILES);
-        // echo "</pre>";
-        // exit;
-
         $formData = [
             "id" => $_POST["id"],
             "title" => $_POST["title"],
@@ -115,10 +109,27 @@ class ProductController
             "existingImagePath" => $_POST["existingImage"]
         ];
 
-
         $this->productModel->load($formData);
+        $errors = $this->productModel->saveProduct();
 
-        $this->productModel->editProduct();
+        // If there are no errors, return to the index page
+        if (empty($errors)) {
+            header("Location: /");
+            exit;
+        }
+
+        // If there are errors, return to the add page
+        $id = $_POST["id"];
+        $result = $this->productModel->getProductById((int) $id);
+        View::make(
+            "products/edit",
+            [
+                "page" => "Edit Product",
+                "product" => $result,
+                "errors" => $errors
+            ]
+        );
+
     }
 
     #[Get("/delete")]
@@ -129,6 +140,7 @@ class ProductController
         // Go back to the index of no id is provided
         if (empty($id)) {
             header("Location: /");
+            exit;
         }
 
         $result = $this->productModel->getProductById((int) $id);

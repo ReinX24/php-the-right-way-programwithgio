@@ -11,6 +11,7 @@
 
 <body>
 
+    <!-- TODO: add navbar -->
     <?= $content; ?>
 
 </body>
