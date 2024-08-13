@@ -20,7 +20,8 @@ class Product extends Model
     private ?string $title = null;
     private ?string $description = null;
     private ?float $price = null;
-    private ?string $imagePath = null;
+    private ?array $newImage = null;
+    private ?string $existingImagePath = null;
     private ?array $imageFile = null;
 
     public function __construct()
@@ -43,10 +44,11 @@ class Product extends Model
 
     public function load(array $productData)
     {
+        $this->id = $productData["id"] ?? null;
         $this->title = $productData["title"] ?? null;
-        $this->description = $productData["title"] ?? null;
-        $this->imageFile = $productData["imageFile"] ?? null;
-        $this->imagePath = $productData["imagePath"] ?? null;
+        $this->description = $productData["description"] ?? null;
+        $this->newImage = $productData["newImage"] ?? null;
+        $this->existingImagePath = $productData["existingImagePath"] ?? null;
         $this->price = (float) $productData["price"] ?? null;
     }
 
@@ -68,18 +70,21 @@ class Product extends Model
         }
 
         if (empty($errors)) {
-            if ($this->imageFile && $this->imageFile["tmp_name"]) {
+
+            $imagePath = null;
+
+            if ($this->newImage && $this->newImage["tmp_name"]) {
+                // If an image is already set for the object and we want to 
+                // update the image
+                // if ($this->newImage && isset($this->existingImagePath)) {
+                //     unlink("/../../pubic" . $this->existingImagePath);
+                // }
+
                 // Setting imagePath in reference to public
-                $this->imagePath = "/storage/images/" . uniqid("product_") . "/" . $this->imageFile["name"];
+                $imagePath = "/storage/images/" . uniqid("product_") . "/" . $this->newImage["name"];
 
                 // Setting destination path relative to current file
-                $destinationPath = __DIR__ . "/../../public" . $this->imagePath;
-
-                $product = (new ProductEntity())
-                    ->setTitle($this->title)
-                    ->setDescription($this->description)
-                    ->setImage($this->imagePath)
-                    ->setPrice($this->price);
+                $destinationPath = __DIR__ . "/../../public" . $imagePath;
 
                 // echo "<pre>";
                 // var_dump($product);
@@ -87,11 +92,17 @@ class Product extends Model
                 // exit;
 
                 mkdir(dirname($destinationPath));
-                move_uploaded_file($this->imageFile["tmp_name"], $destinationPath);
-
-                $this->entityManager->persist($product);
-                $this->entityManager->flush();
+                move_uploaded_file($this->newImage["tmp_name"], $destinationPath);
             }
+
+            $product = (new ProductEntity())
+                ->setTitle($this->title)
+                ->setDescription($this->description)
+                ->setImage($imagePath ?? null)
+                ->setPrice($this->price);
+
+            $this->entityManager->persist($product);
+            $this->entityManager->flush();
         }
 
         return $errors;
@@ -129,6 +140,32 @@ class Product extends Model
         return $query->getSingleResult();
     }
 
-    // TODO: edit product
-    // TODO: remove product POST function
+    public function editProduct()
+    {
+        // TODO: unlink and change the photo of product if new image is uploaded
+        $product = $this->getProductById($this->id);
+
+        $product->setTitle($this->title);
+        $product->setDescription($this->description);
+        $product->setPrice($this->price);
+
+        $this->entityManager->persist($product);
+        $this->entityManager->flush();
+
+        header("Location: /");
+    }
+
+    public function deleteProductById(int $id)
+    {
+        $queryBuilder = $this->entityManager->createQueryBuilder();
+        $query = $queryBuilder
+            ->delete(ProductEntity::class, "i")
+            ->where(
+                $queryBuilder->expr()->eq("i.id", ":id")
+            )
+            ->setParameter("id", $id)
+            ->getQuery();
+
+        $query->execute();
+    }
 }

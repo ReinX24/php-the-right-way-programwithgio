@@ -26,10 +26,10 @@ class Product
     private string $title;
 
     #[Column(type: Types::TEXT)]
-    private string $description;
+    private ?string $description;
 
     #[Column(type: Types::STRING)]
-    private string $image;
+    private ?string $image;
 
     #[Column(type: Types::DECIMAL, precision: 10, scale: 2)]
     private float $price;
@@ -62,7 +62,7 @@ class Product
         return $this;
     }
 
-    public function setImage(string $image)
+    public function setImage(?string $image)
     {
         $this->image = $image;
 

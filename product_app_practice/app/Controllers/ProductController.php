@@ -32,8 +32,8 @@ class ProductController
         // echo "</pre>";
         // exit;
 
-        return View::make(
-            "index",
+        View::make(
+            "products/index",
             ["page" => "Home", "products" => $allProducts]
         );
     }
@@ -41,7 +41,7 @@ class ProductController
     #[Get("/add")]
     public function addGet()
     {
-        return View::make("add", ["page" => "Add Product"]);
+        View::make("products/add", ["page" => "Add Product"]);
     }
 
     #[Post("/add")]
@@ -52,7 +52,7 @@ class ProductController
         $formData = [
             "title" => $_POST["title"],
             "description" => $_POST["description"],
-            "imageFile" => $_FILES["image"],
+            "newImage" => $_FILES["image"],
             "price" => $_POST["price"],
         ];
 
@@ -66,8 +66,8 @@ class ProductController
         }
 
         // If there are errors, return to the add page
-        return View::make(
-            "add",
+        View::make(
+            "products/add",
             [
                 "page" => "Add Product",
                 "formData" => $formData,
@@ -76,8 +76,53 @@ class ProductController
         );
     }
 
+    #[Get("/edit")]
+    public function editGet()
+    {
+        $id = $_GET["id"];
+
+        if (empty($id)) {
+            header("Location: /");
+        }
+
+        $result = $this->productModel->getProductById((int) $id);
+        View::make(
+            "products/edit",
+            [
+                "page" => "Delete Product",
+                "product" => $result
+            ]
+        );
+    }
+
+    #[Post("/edit")]
+    public function editPost()
+    {
+        $errors = [];
+
+        // echo "<pre>";
+        // var_dump($_POST);
+        // var_dump($_FILES);
+        // echo "</pre>";
+        // exit;
+
+        $formData = [
+            "id" => $_POST["id"],
+            "title" => $_POST["title"],
+            "description" => $_POST["description"],
+            "newImage" => $_FILES["image"] ?? null,
+            "price" => $_POST["price"],
+            "existingImagePath" => $_POST["existingImage"]
+        ];
+
+
+        $this->productModel->load($formData);
+
+        $this->productModel->editProduct();
+    }
+
     #[Get("/delete")]
-    public function deletePost()
+    public function deleteGet()
     {
         $id = $_GET["id"];
 
@@ -87,12 +132,22 @@ class ProductController
         }
 
         $result = $this->productModel->getProductById((int) $id);
-        return View::make(
-            "delete",
+        View::make(
+            "products/delete",
             [
                 "page" => "Delete Product",
                 "product" => $result
             ]
         );
+    }
+
+    #[Post("/delete")]
+    public function deletePost()
+    {
+        $id = (int) $_POST["id"];
+
+        $this->productModel->deleteProductById($id);
+
+        header("Location: /");
     }
 }
