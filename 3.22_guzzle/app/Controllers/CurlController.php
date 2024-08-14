@@ -22,8 +22,6 @@ class CurlController
             "email" => $email
         ];
 
-        // $url = "https://example.com";
-        // $url = "https://api.emailable.com/v1/verify?email=" . $email . "&api_key=" . $apiKey;
         $url = "https://api.emailable.com/v1/verify?" . http_build_query($params);
 
         curl_setopt($handle, CURLOPT_URL, $url); // setting curl options
@@ -38,9 +36,5 @@ class CurlController
             print_r($data);
             echo "</pre>";
         }
-
-        // echo "<pre>";
-        // print_r(curl_getinfo($handle));
-        // echo "</pre>";
     }
 }
