@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App;
 
+use App\Contracts\EmailValidationInterface;
 use App\Exceptions\RouteNotFoundException;
+use App\Services\AbstractApi\EmailValidationService;
 use App\Services\PaddlePayment;
 use App\Services\PaymentGatewayInterface;
 use App\Services\PaymentGatewayService;
@@ -14,6 +16,7 @@ use Dotenv\Dotenv;
 use Illuminate\Container\Container;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Events\Dispatcher;
+// use App\Services\Emailable\EmailValidationService;
 
 class App
 {
@@ -24,8 +27,7 @@ class App
         protected Container $container,
         protected ?Router $router = null,
         protected array $request = [],
-    ) {
-    }
+    ) {}
 
     // public static function db(): DB
     // {
@@ -74,6 +76,13 @@ class App
         $this->container->bind(
             MailerInterface::class,
             fn() => new CustomMailer($this->config->mailer["dsn"])
+        );
+
+        // Binding the constructor of the EmailValidationService class becauase
+        // it accepts a string as a dependency
+        $this->container->bind(
+            EmailValidationInterface::class,
+            fn() => new EmailValidationService($this->config->apiKeys["abstract_api_email_validation"])
         );
 
         return $this;

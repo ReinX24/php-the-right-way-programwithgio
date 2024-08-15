@@ -15,9 +15,9 @@ class Config
     {
         $this->config = [
             'db' => [
-                'host'     => $env['DB_HOST'],
+                'host' => $env['DB_HOST'],
                 'username' => $_ENV["DB_USER"],
-                'password'     => $env['DB_PASS'],
+                'password' => $env['DB_PASS'],
                 'database' => $_ENV["DB_DATABASE"],
                 // 'driver'   => $env['DB_DRIVER'] ?? 'mysql',
                 // 'driver' => $env["DB_DRIVER"] ?? "pdo_mysql",
@@ -28,6 +28,10 @@ class Config
             ],
             'mailer' => [
                 'dsn' => $env["MAILER_DSN"] ?? "",
+            ],
+            'apiKeys' => [
+                'emailable' => $env["EMAILABLE_API_KEY"] ?? "",
+                'abstract_api_email_validation' => $env["ABSTRACT_API_EMAIL_VALIDATION_API_KEY"] ?? ""
             ]
         ];
     }

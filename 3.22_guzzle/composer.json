@@ -23,6 +23,7 @@
         "doctrine/migrations": "^3.8",
         "symfony/yaml": "^7.1",
         "illuminate/database": "^11.20",
-        "illuminate/events": "^11.20"
+        "illuminate/events": "^11.20",
+        "guzzlehttp/guzzle": "^7.9"
     }
 }
